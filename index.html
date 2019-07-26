@@ -1,8 +1,14 @@
 <html>
 <head>
+    <title>qBlocks</title>
+    <link rel="shortcut icon" href="logo.png" />
     <script>
-
+        var finished = false;  
         
+        var startTime = performance.now();
+        //var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  
+
+        var moves = 0;
 
         var matrix = [];
         var solved = [];
@@ -35,6 +41,8 @@
         document.getElementById("c1").innerText  = column[0].toString();
 
         function submitButtonStyle(_this, a, b) {
+            if(finished) return;
+            moves++;
             if(_this.style.backgroundColor != "red")
             {
                 matrix[a][b] = 1;
@@ -89,6 +97,7 @@
                 {
                     //wait(500);
                     congratulations();
+                    finished = true;
                     
                 }   
             }
@@ -103,8 +112,14 @@
         }
 
         function congratulations(){
-            alert("Congratulations!");
-            location.reload();
+           // alert("Congratulations!");
+            
+            var finishTime = performance.now();
+            var timePlayed = finishTime - startTime;
+            
+            //var time = timePlayed.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            document.getElementById("cong").innerText = 'Congratulations! Number of moves:' + moves.toString() + '\n Time played: ' + Math.round(timePlayed/1000 * 100) / 100 + ' seconds \n\n Play another game';
+           // location.reload();
         }
 
         function arraysEqual(a1,a2) {
@@ -197,12 +212,16 @@
         <button onclick="submitButtonStyle(this, 4, 2)" type="submit" class="button" width="300" height="600"> </button>
         <button onclick="submitButtonStyle(this, 4, 3)" type="submit" class="button" width="300" height="600"> </button>
         <button onclick="submitButtonStyle(this, 4, 4)" type="submit" class="button" width="300" height="600"> </button>
+        <br><br>
+        <button onclick="location.reload()" type="submit" class="button" width="500" value="New game" style="background-color: white; color: black; border: thin solid black;">New game</button>
+        <i><div id="cong" style="font-size: 25px;"></div></i>
         <br>
+        <hr>
         <br>
         <h2>qBlocks</h2>
         <h3>Numbers on the side tell how many selected fields have to be in that row.</h3>
         <h3>Numbers on top tell how many selected fields have to be in that column.</h3>
-        <h4>Sekect the field by clicking on it. When selected, the field will turn red.</h4>
+        <h4>Select the field by clicking on it. When selected, the field will turn red.</h4>
         <script>
             
         console.log(document.getElementById("c1").innerText);
