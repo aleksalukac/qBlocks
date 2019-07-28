@@ -75,7 +75,8 @@ var finished = false;
 
             }
 
-
+            
+            check();
         }
 
        
@@ -116,7 +117,25 @@ var finished = false;
                         row2[i] += matrix[j][i];
                     }
                 }
-
+                for(var i = 0; i < boardSize; i++)
+                {
+                    if(column[i] == column2[i])
+                    {
+                        document.getElementById("c" + (i+1).toString()).style.backgroundColor = "#90EE90"; 
+                    }
+                    else
+                    {
+                        document.getElementById("c" + (i+1).toString()).style.backgroundColor = "#DCDCDC";
+                    }
+                    if(row[i] == row2[i])
+                    {
+                        document.getElementById("r" + (i+1).toString()).style.backgroundColor = "#90EE90"; 
+                    }
+                    else
+                    {
+                        document.getElementById("r" + (i+1).toString()).style.backgroundColor = "#DCDCDC";
+                    }
+                }
                 if(arraysEqual(column,column2) && arraysEqual(row,row2))
                 {
                     //wait(500);
@@ -142,8 +161,22 @@ var finished = false;
             var timePlayed = finishTime - startTime;
             
             //var time = timePlayed.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-            document.getElementById("cong").innerText = 'Congratulations! Number of moves:' + moves.toString() + '\n Time played: ' + Math.round(timePlayed/1000 * 100) / 100 + ' seconds \n\n Play another game! :)';
-           // location.reload();
+            if(Math.round(timePlayed/1000 * 100) / 100 < 60)
+            {
+                var seconds = Math.round(timePlayed/100 * 10) / 100;
+                
+                document.getElementById("cong").innerText = 'Congratulations! Number of moves:' + moves.toString() + '\n Time played: ' + seconds.toString() + ' seconds \n\n Play another game! :)';
+            }
+            else
+            {
+                var seconds = Math.round(timePlayed/1000 * 100) / 100;
+                var minutes = Math.round(seconds / 60);
+                seconds = seconds - 60 * minutes;
+                seconds = Math.floor(seconds);
+                document.getElementById("cong").innerText = 'Congratulations! Number of moves:' + moves.toString() + '\n Time played: ' + minutes.toString() + ' min and ' + seconds.toString() + ' sec \n\n Play another game! :)';
+
+            }
+                 // location.reload();
         }
 
         function arraysEqual(a1,a2) {
