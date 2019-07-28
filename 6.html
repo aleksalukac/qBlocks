@@ -1,0 +1,329 @@
+<html>
+        <head>
+            <title>qBlocks</title>
+            <link rel="shortcut icon" href="logo.png" />
+            <script>
+                var finished = false;  
+                var boardSize = 6;
+                var startTime = performance.now();
+                //var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();  
+        
+                var moves = 0;
+        
+                var matrix = [];
+                var solved = [];
+        
+                var column = [];
+        
+                var row = [];
+        
+        
+                function setup()
+                {
+                    boardSize = 6;
+                    //alert('setup');
+                    for(var i=0; i < boardSize; i++) {
+                        matrix[i] = [];
+                        solved[i] = [];
+                        for(var j=0; j < boardSize; j++) {
+                            matrix[i][j] = 0;
+                            solved[i][j] = Math.floor(Math.random() * 2); 
+                        }
+                    }   
+                    
+                    for(var i=0; i<boardSize; i++) {
+                        column[i] = 0;
+                        for(var j=0; j<boardSize; j++) {
+                            column[i] += solved[i][j];
+                        }
+                    }   
+        
+                    for(var i=0; i<boardSize; i++) {
+                        row[i] = 0;
+                        for(var j=0; j<boardSize; j++) {
+                            row[i] += solved[j][i];
+                        }
+                    }   
+        
+                    
+                    console.log(document.getElementById("c1").innerText);
+                    document.getElementById("c1").innerText  = column[0].toString();
+                    document.getElementById("c2").innerText  = column[1].toString();        
+                    document.getElementById("c3").innerText  = column[2].toString();        
+                    document.getElementById("c4").innerText  = column[3].toString();        
+                    document.getElementById("c5").innerText  = column[4].toString();
+                    
+                    document.getElementById("r1").innerText  = row[0].toString();
+                    document.getElementById("r2").innerText  = row[1].toString();        
+                    document.getElementById("r3").innerText  = row[2].toString();        
+                    document.getElementById("r4").innerText  = row[3].toString();        
+                    document.getElementById("r5").innerText  = row[4].toString();
+        
+                    //extra
+                    
+                    switch(boardSize) {
+                        case 10:
+                            document.getElementById("c10").innerText  = column[9].toString(); 
+                            document.getElementById("r10").innerText  = row[9].toString();
+                        case 9:
+                            document.getElementById("c9").innerText  = column[8].toString();   
+                            document.getElementById("r9").innerText  = row[8].toString();
+                        case 8:
+                            document.getElementById("c8").innerText  = column[7].toString(); 
+                            document.getElementById("r8").innerText  = row[7].toString();  
+                        case 7:
+                            document.getElementById("c7").innerText  = column[6].toString();
+                            document.getElementById("r7").innerText  = row[6].toString();   
+                        case 6:
+                            document.getElementById("c6").innerText  = column[5].toString();
+                            document.getElementById("r6").innerText  = row[5].toString();
+        
+                    }
+        
+        
+                }
+        
+               
+                /*console.log(document.getElementById("c1").innerText);
+                document.getElementById("c1").innerText  = column[0].toString();*/
+        
+                function submitButtonStyle(_this, a, b) {
+                    if(finished) return;
+                    moves++;
+                    if(_this.style.backgroundColor != "red")
+                    {
+                        matrix[a][b] = 1;
+                        _this.style.backgroundColor = "red";
+                    }
+                    else{
+                        matrix[a][b] = 0;
+                        _this.style.backgroundColor = "grey"
+                    }
+                    wait(50);
+                    check();
+                }
+                
+                function check() {
+                    var ch = 0;
+                    for(var i = 0; i < boardSize; i++)
+                    {
+                        for(var j = 0; j < boardSize; j++)
+                        {
+                            if(solved[i][j] != matrix[i][j])
+                            {
+                                ch = 1; 
+                                break;
+                            }
+                        }
+                    }
+                    if(ch == 0)
+                    {
+                       // wait(500);
+                        congratulations();
+                            
+                    }
+                    else
+                    {
+                        var column2 = [];
+                        for(var i=0; i < boardSize; i++) {
+                            column2[i] = 0;
+                            for(var j=0; j < boardSize; j++) {
+                                column2[i] += matrix[i][j];
+                            }
+                        }   
+        
+                        var row2 = [];
+                        for(var i=0; i < boardSize; i++) {
+                            row2[i] = 0;
+                            for(var j=0; j<boardSize; j++) {
+                                row2[i] += matrix[j][i];
+                            }
+                        }
+        
+                        if(arraysEqual(column,column2) && arraysEqual(row,row2))
+                        {
+                            //wait(500);
+                            congratulations();
+                            finished = true;
+                            
+                        }   
+                    }
+                }
+        
+                function wait(ms){
+                    var start = new Date().getTime();
+                    var end = start;
+                    while(end < start + ms) {
+                      end = new Date().getTime();
+                   }
+                }
+        
+                function congratulations(){
+                   // alert("Congratulations!");
+                    
+                    var finishTime = performance.now();
+                    var timePlayed = finishTime - startTime;
+                    
+                    //var time = timePlayed.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    document.getElementById("cong").innerText = 'Congratulations! Number of moves:' + moves.toString() + '\n Time played: ' + Math.round(timePlayed/1000 * 100) / 100 + ' seconds \n\n Play another game! :)';
+                   // location.reload();
+                }
+        
+                function arraysEqual(a1,a2) {
+                 /* WARNING: arrays must not contain {objects} or behavior may be undefined */
+                    return JSON.stringify(a1)==JSON.stringify(a2);
+                }
+        
+             </script>
+             
+             <style>
+                 .button {
+                    background-color: grey;
+                    border: none;
+                    color: white;
+                    padding: 15px 15px;
+                    border-color: coral;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                }
+        
+                .button2 {
+                    background-color: grey;
+                    border: none;
+                    color: white;
+                    padding: 15px 15px;
+                    border-color: coral;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    
+                    display: none;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                }
+        
+                .info {
+                    background-color: #DCDCDC;
+                    border: none;
+                    color: black;
+                    padding: 9px 10px 15px 13px;
+                    
+                    font-size: 12px;
+                    text-align: center;
+                    margin: 4px 2px;
+                    /*
+                    font-size: 16px;
+                    /*border-color: coral;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;*/
+                }
+        
+                .info2 {
+                    background-color: #DCDCDC;
+                    border: none;
+                    color: black;
+                    padding: 9px 10px 15px 13px;
+                    display: none;
+                    font-size: 12px;
+                    text-align: center;
+                    margin: 4px 2px;
+                    /*
+                    font-size: 16px;
+                    /*border-color: coral;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;*/
+                }
+             </style>
+        
+        </head>
+        <body onload="setup()">
+                <!--input  type="button" class="button" value="PrikaЕѕi sve ДЌlanove" id="col1"></input-->
+                <button onclick="" type="submit" class="info" value="nesto" width="300" height="600" id="r0"> X </button>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="r1"> nesto </button>
+                <button onclick="" type="submit" class="info" value="nesto" width="300" height="600" id="r2"> nesto </button>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="r3"> nesto </button>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="r4"> nesto </button>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="r5"> nesto </button>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="r6"> nesto </button>
+                <br>
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="c1"> nesto </button>
+                <button onclick="submitButtonStyle(this, 0, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 0, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 0, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 0, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 0, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 0, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br>
+                
+                <button onclick="" type="submit" class="info"  value="nesto" width="300" height="600" id="c2"> nesto </button>
+                <button onclick="submitButtonStyle(this, 1, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 1, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 1, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 1, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 1, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 1, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br>
+                
+                <button onclick="" type="submit"  class="info" value="nesto" width="300" height="600" id="c3"> nesto </button>
+                <button onclick="submitButtonStyle(this, 2, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 2, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 2, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 2, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 2, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 2, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br>
+        
+                <button onclick="" type="submit" class="info"  value="nesto" width="300" height="600" id="c4"> nesto </button>
+                <button onclick="submitButtonStyle(this, 3, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 3, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 3, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 3, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 3, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 3, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br>
+                
+                <button onclick="" type="submit" class="info" value="nesto" width="300" height="600" id="c5"> nesto </button>
+                <button onclick="submitButtonStyle(this, 4, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 4, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 4, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 4, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 4, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 4, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br>
+                
+                <button onclick="" type="submit" class="info" value="nesto" width="300" height="600" id="c6"> nesto </button>
+                <button onclick="submitButtonStyle(this, 5, 0)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 5, 1)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 5, 2)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 5, 3)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 5, 4)" type="submit" class="button" width="300" height="600"> </button>
+                <button onclick="submitButtonStyle(this, 5, 5)" type="submit" class="button" width="300" height="600"> </button>
+                <br><br>
+                <button onclick="location.reload()" type="submit" class="button" width="500" value="New game" style="background-color: white; color: black; border: thin solid black;">New game</button>
+                <i><div id="cong" style="font-size: 25px;"></div></i>
+                <br>
+                <hr>
+                <br>
+                <h2>qBlocks</h2>
+                <h3>Numbers on the side tell how many selected fields have to be in that row.</h3>
+                <h3>Numbers on top tell how many selected fields have to be in that column.</h3>
+                <h4>Select the field by clicking on it. When selected, the field will turn red.</h4>
+                <script>
+                    
+                </script>
+        
+        </body>
+        </html>
